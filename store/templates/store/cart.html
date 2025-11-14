@@ -1,72 +1,228 @@
-{% extends  'store/main.html'%}
-
-{% block content %}
+{% extends 'store/main.html' %}
 {% load cart %}
+{% block content %}
 
 <style>
 
+.cartContainer {
+    width: 92%;
+    max-width: 1100px;
+    margin: auto;
+}
+
+h1.textCenter {
+    text-align: center;
+    color: #2f5d4c;
+    font-size: 32px;
+    font-weight: 700;
+    margin: 20px 0 30px;
+}
+
+/* MAIN CARD */
+.boxElement {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    padding: 25px;
+    margin-bottom: 40px;
+}
+
+/* DESKTOP HEADER */
+.cartHeader {
+    display: grid;
+    grid-template-columns: 120px 1.5fr 1fr 1fr 1fr;
+    font-weight: 600;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* DESKTOP ROW */
+.cartRow {
+    display: grid;
+    grid-template-columns: 120px 1.5fr 1fr 1fr 1fr;
+    gap: 15px;
+    padding: 20px 0;
+    border-bottom: 1px solid #eee;
+    transition: 0.3s;
+}
+
+.cartRow:hover {
+    background: #fafafa;
+}
+
+.cartIMG {
+    width: 100%;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.priceTotal {
+    text-align: right;
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 20px;
+    color: #222;
+}
+
+.darkBtn, .greenBtn {
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #fff;
+    transition: 0.3s;
+}
+
+.darkBtn { background: #2f5d4c; }
+.darkBtn:hover { background: #427a64; }
+
+.greenBtn { background: #538671; float: right; }
+.greenBtn:hover { background: #366552; }
+
+.formAlert p {
+    color: #b33;
+    font-weight: bold;
+}
+
+/* ============================
+   MOBILE LAYOUT
+============================ */
+@media (max-width: 768px) {
+
+    .cartHeader {
+        display: none;
+    }
+
+    .cartRow {
+        display: flex;
+        flex-direction: column;
+        padding: 15px;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        margin-bottom: 20px;
+        border-bottom: none;
+    }
+
+    .cartIMG {
+        width: 100%;
+        height: auto;
+    }
+
+    .cartRow > div {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+
+    .cartRow p {
+        margin: 3px 0;
+        font-size: 15px;
+    }
+
+    .greenBtn, .darkBtn {
+        width: 100%;
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        float: none;
+    }
+
+    .priceTotal {
+        text-align: center;
+        font-size: 18px;
+    }
+
+    h1.textCenter {
+        font-size: 26px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1.textCenter { font-size: 23px; }
+    .cartRow p { font-size: 14px; }
+    .priceTotal { font-size: 16px; }
+}
 
 </style>
 
-<br>
+
 <h1 class="textCenter">Your Cart</h1>
-<div class="row">
-  <div class="col" style="width: 84vw;">
+
+<div class="cartContainer">
+
     <a class="darkBtn" href="{% url 'store_page' %}">&#x2190; Continue Shopping</a>
-    <br><br><br>
+    <br><br>
+
     <div class="boxElement">
-      <div class="cartRow" style="padding:15px 0">
-  
-      <div style="flex:2"><!-- IMAGE --></div>
-        <div style="flex:2"><strong>Product</strong></div>
-        <div style="flex:1"><strong>Price</strong></div>
-        <div style="flex:1"><strong>Quantity</strong></div>
-        <div style="flex:1"><strong>Total</strong></div>
-      </div> 
 
-      {% for item in items %} 
-      <div class="cartRow">
-        <div style="flex:2"><img class="cartIMG" src="{{ item|cart_img:request.session.cart }}"></div>
-        <!-- <div style="flex:5">
-          <p><strong>{{ item.name }}</strong> ({{ item.description }})</p>
-          <p style="font-weight: bolder; font-size: 18px">Rs {{ item|item_total:request.session.cart }}</p>
+        <!-- DESKTOP HEADER -->
+        <div class="cartHeader">
+            <div></div>
+            <div>Product</div>
+            <div>Price</div>
+            <div>Qty</div>
+            <div>Total</div>
         </div>
-        <div style="flex:1"><p>+ {{ item|cart_quantity:request.session.cart }} -</p></div> -->
-        <!-- -------------------- -->
-        <div style="flex:2;"><p>{{ item.name }} ({{ item.description }})</p></div>
-        <div style="flex:1"><p>Rs {{ item.price }}</p></div>
-        <div style="flex:1">
-          <p class="quantity">{{ item|cart_quantity:request.session.cart }}</p>
-          <div class="quantity">
-            <div><img class="chg-quantity" src=""></div>
-            <div><img class="chg-quantity" src=""></div>
-          </div>
-        </div>
-        <div style="flex:1"><p>Rs {{ item|item_total:request.session.cart }}</p></div>
-      </div>
-      {% endfor %}
 
-      <h5 class="priceTotal">Total :<strong> Rs {{items|price_total:request.session.cart}}</strong></h5>
-      {% if request.session.newUserDis %}
+        <!-- CART ITEMS -->
+        {% for item in items %}
+        <div class="cartRow">
+
+            <!-- IMAGE -->
+            <div>
+                <img class="cartIMG" src="{{ item|cart_img:request.session.cart }}">
+            </div>
+
+            <!-- DETAILS -->
+            <div>
+                <p><strong>{{ item.name }}</strong></p>
+                <p>{{ item.description }}</p>
+            </div>
+
+            <!-- PRICE -->
+            <div>
+                <p>Rs {{ item.price }}</p>
+            </div>
+
+            <!-- QUANTITY -->
+            <div>
+                <p>{{ item|cart_quantity:request.session.cart }}</p>
+            </div>
+
+            <!-- TOTAL -->
+            <div>
+                <p>Rs {{ item|item_total:request.session.cart }}</p>
+            </div>
+
+        </div>
+        {% endfor %}
+
+        <!-- TOTAL -->
+        <h5 class="priceTotal">
+            Total: <strong>Rs {{ items|price_total:request.session.cart }}</strong>
+        </h5>
+
+        <!-- DISCOUNT -->
+        {% if request.session.newUserDis %}
         {% if items|price_total:request.session.cart >= 500 %}
-          <h5 class="priceTotal">Discount :<strong> 20%</strong></h5>
-          <h5 class="priceTotal">Total :<strong> Rs {{items|dis20:request.session.cart}}</strong></h5>
+            <h5 class="priceTotal">Discount: <strong>20%</strong></h5>
+            <h5 class="priceTotal">
+                Total After Discount:
+                <strong>Rs {{ items|dis20:request.session.cart }}</strong>
+            </h5>
         {% endif %}
-      {% endif %}
+        {% endif %}
 
+        <!-- CHECKOUT BUTTON -->
+        {% if request.session.customer %}
+            <a class="greenBtn" href="{% url 'checkout_page' %}">Checkout</a>
+        {% else %}
+            <a class="greenBtn" href="{% url 'cart_page' %}">Checkout</a>
+            <div class="formAlert"><p>Not logged in!</p></div>
+        {% endif %}
 
-      {% if request.session.customer %}
-        <a style="float:right; margin-top: 30px;" class="greenBtn" href="{% url 'checkout0_page' %}">Checkout</a>
-      {% else %}
-        <a style="float:right; margin-top: 60px;" class="greenBtn yolo" href="{% url 'cart_page' %}">Checkout</a>
-        <div class="formAlert" style="padding: 1px; margin-left: 20px;">
-        <p>not logged in!</p>
-      </div>
-      {% endif %}   
-      
-      
-      
     </div>
-  </div>
+
 </div>
-{% endblock content %}
+
+{% endblock %}

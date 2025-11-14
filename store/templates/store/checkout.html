@@ -1,75 +1,338 @@
-{% extends  'store/main.html'%}
-
-{% block content %}
+{% extends 'store/main.html' %}
 {% load cart %}
-<br>
-<h1 class="textCenter">Checkout</h1>
-<div class="row checkoutFlex">
-  <div class="col">
-    <a class="darkBtn" href="{% url 'cart_page' %}">&#x2190; Back to cart</a>
-    <br>
-    <br>
-    <div class="boxElement shippingInfo">
-      <form id="form" action="/checkout" method="POST">
-        {% csrf_token %}
-        <div>
-          <h2 class="textCenter">Shipping Info</h2><hr><br>
-          
-          <div>
-            <input class="formInput" type="text" name="add" placeholder="address" required>
-          </div><br>
-          <div>
-            <input class="formInput" type="text" name="city" placeholder="city" required>
-          </div><br>
-          <div>
-            <input class="formInput" type="text" name="state" placeholder="state" required>
-          </div><br>
-          <!-- <div class="form-field ">
-            <input class="form-control" type="number" name="pin" placeholder="pin code" required>
-          </div> -->
-          <br>
+{% block content %}
 
-        </div>
-        <!-- <input class="greenBtn" type="submit" value="Continue">
+<style>
 
-      </form> -->
+/* ===========================================
+   GLOBAL WRAPPER
+=========================================== */
 
-    </div>
-  </div>
-  
-  <div class="col">
-    <br>
+.checkout-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    padding-bottom: 40px;
+}
+
+h1.checkout-title {
+    text-align: center;
+    font-size: 34px;
+    font-weight: 800;
+    color: #2f5d4c;
+    margin: 20px 0 35px;
+}
+
+/* ===========================================
+   CARD STYLING
+=========================================== */
+
+.section-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: 0px 4px 18px rgba(0,0,0,0.06);
+    margin-bottom: 35px;
+    transition: 0.3s;
+}
+
+.section-card:hover {
+    box-shadow: 0px 8px 24px rgba(0,0,0,0.10);
+}
+
+/* Back button */
+.backBtn {
+    background: #2f5d4c;
+    padding: 10px 18px;
+    border-radius: 10px;
+    color: #fff;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    font-weight: 600;
+    gap: 5px;
+    transition: 0.3s;
+}
+
+.backBtn:hover {
+    background: #427a64;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* ===========================================
+   FLEX LAYOUT (DESKTOP)
+=========================================== */
+
+.checkout-flex {
+    display: flex;
+    justify-content: space-between;
+    gap: 35px;
+}
+
+.shipping-box, .summary-box {
+    flex: 1;
+    min-width: 300px;
+}
+
+/* ===========================================
+   FORM INPUTS
+=========================================== */
+
+.checkout-label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.checkout-input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    font-size: 15px;
+    outline: none;
+    transition: .2s ease;
+}
+
+.checkout-input:focus {
+    border-color: #538671;
+    box-shadow: 0 0 0 3px rgba(83,134,113,0.2);
+}
+
+/* ===========================================
+   ORDER SUMMARY STYLING
+=========================================== */
+
+.summary-title {
+    text-align: center;
+    font-size: 26px;
+    font-weight: 700;
+    color: #2f5d4c;
+    margin-bottom: 20px;
+}
+
+.summary-item {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.summary-item:last-child {
+    border-bottom: none;
+}
+
+.summary-img {
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.summary-name {
+    font-weight: 700;
+}
+
+.summary-price {
+    color: #444;
+    margin-top: 4px;
+}
+
+.summary-qty {
+    margin-left: auto;
+    font-weight: 700;
+}
+
+.summary-total {
+    text-align: right;
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 15px;
+}
+
+.summary-discount {
+    text-align: right;
+    font-size: 18px;
+    color: #d35400;
+}
+
+/* ===========================================
+   SUBMIT BUTTON
+=========================================== */
+
+.submitBtn {
+    background: #538671;
+    color: #fff;
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 18px;
+    border: none;
+    margin-top: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.submitBtn:hover {
+    background: #3d6a55;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+/* ===========================================
+   RESPONSIVENESS
+=========================================== */
+
+/* Tablets */
+@media (max-width: 992px) {
+    .checkout-flex {
+        flex-direction: column;
+    }
+
+    h1.checkout-title {
+        font-size: 30px;
+    }
+
+    .section-card {
+        padding: 25px;
+    }
+}
+
+/* Phones */
+@media (max-width: 750px) {
+    .summary-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .summary-img {
+        width: 100%;
+        max-width: 240px;
+        height: auto;
+    }
+
+    .summary-qty {
+        margin-left: 0;
+        margin-top: 5px;
+    }
+
+    .checkout-container {
+        width: 94%;
+    }
+}
+
+/* Very small phones (360px) */
+@media (max-width: 420px) {
+
+    h1.checkout-title {
+        font-size: 25px;
+    }
+
+    .section-card {
+        padding: 18px;
+    }
+
+    .checkout-input {
+        padding: 12px;
+    }
+
+    .summary-img {
+        width: 100%;
+        border-radius: 10px;
+    }
+
+    .submitBtn {
+        padding: 14px;
+        font-size: 16px;
+    }
+}
+
+</style>
+
+
+
+<h1 class="checkout-title">Checkout</h1>
+
+<div class="checkout-container">
+
+    <a class="backBtn" href="{% url 'cart_page' %}">← Back to cart</a>
     <br><br>
-    <div class="boxElement orderSummary">
-      <h2 class="textCenter">Order Summary</h2>
-      <hr>
-      {% for item in items %}
-      <div class="cartRow">
-        <div style="flex:2"><img class="checkoutIMG" src="{{ item|cart_img:request.session.cart }}"></div>
-        <div style="flex:2">
-          <p>{{ item.name }} ({{ item.description }})</p>
-          <p><strong>Rs {{ item.price }}</strong></p>
-        </div>
-        <!-- <div style="flex:2"><p>{{ item.name }} ({{ item.description }})</p></div>
-        <div style="flex:1"><p>Rs {{ item.price }}</p></div> -->
-        <div style="flex:1"><p>x{{ item|cart_quantity:request.session.cart }}</p></div>
-      </div>
-      {% endfor %}
 
-      <h4 style="text-align:right; margin-right: 50px;">Total :   Rs {{items|price_total:request.session.cart}}</h4> 
-      {% if request.session.newUserDis %}
-        {% if items|price_total:request.session.cart >= 500 %}
-          <h4 style="text-align:right; margin-right: 50px;">Discount :<strong> 20%</strong></h4>
-          <h4 style="text-align:right; margin-right: 50px;">Total :<strong> Rs {{items|dis20:request.session.cart}}</strong></h4>
-        {% endif %}
-      {% endif %}
+    <div class="checkout-flex">
+
+        <!-- SHIPPING INFO -->
+        <div class="shipping-box">
+            <div class="section-card">
+
+                <form method="POST" action="{% url 'checkout_page' %}">
+                    {% csrf_token %}
+
+                    <h2 class="summary-title">Shipping Information</h2>
+
+                    <label class="checkout-label">Address</label>
+                    <input class="checkout-input" name="add" required>
+
+                    <label class="checkout-label">City</label>
+                    <input class="checkout-input" name="city" required>
+
+                    <label class="checkout-label">State</label>
+                    <input class="checkout-input" name="state" required>
+
+                    <label class="checkout-label">Pincode</label>
+                    <input class="checkout-input" type="number" name="pin" required>
+
+            </div>
+        </div>
+
+
+        <!-- ORDER SUMMARY -->
+        <div class="summary-box">
+            <div class="section-card">
+
+                <h2 class="summary-title">Order Summary</h2>
+
+                {% for item in items %}
+                <div class="summary-item">
+
+                    <img class="summary-img" src="{{ item.image.url }}">
+
+
+                    <div>
+                        <p class="summary-name">{{ item.name }} ({{ item.description }})</p>
+                        <p class="summary-price">Rs {{ item.price }}</p>
+                    </div>
+
+                    <p class="summary-qty">× {{ item|cart_quantity:request.session.cart }}</p>
+
+                </div>
+                {% endfor %}
+
+                <h3 class="summary-total">
+                    Total: Rs {{ items|price_total:request.session.cart }}
+                </h3>
+
+                {% if request.session.newUserDis %}
+                {% if items|price_total:request.session.cart >= 500 %}
+                <h3 class="summary-discount">Discount: 20%</h3>
+                <h3 class="summary-total">After Discount: Rs {{ items|dis20:request.session.cart }}</h3>
+                {% endif %}
+                {% endif %}
+
+            </div>
+
+            <button class="submitBtn" type="submit">Place Order</button>
+
+            </form>
+
+        </div>
 
     </div>
-    <input class="greenBtn" type="submit" value="Continue">
-
-      </form>
-</div>
 
 </div>
 
-{% endblock content %}
+{% endblock %}

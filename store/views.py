@@ -206,7 +206,7 @@ def checkout0(request):
     return redirect('checkout_page')
 
 
-def checkout(request):
+def checkout(request): 
   if request.method == 'GET':
     customer = request.session.get('customer')
     cart = request.session.get('cart')

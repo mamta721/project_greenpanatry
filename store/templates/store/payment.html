@@ -1,108 +1,298 @@
-{% extends  'store/main.html'%}
-
+{% extends 'store/main.html' %}
 {% block content %}
+
 <style>
-body{
-  overflow: hidden;
-}
-.popupPayment{
-  width: 100vw;
-  margin: 120px -30px 0 60px;
-}
-.popupContainer {
-  position: relative;
-  color : #000000;
-}
-.popupPayment a{
-  color: #ffffff;
-  padding: 15px;
-  background-color: #3C6255;
-  border-radius: 10px;
-  margin-right: 5px;
-}
-.popupPayment i{
-  font-size: 20px;
-  margin-right: 10px;
-}
-.popupPayment .popupClose{
-  padding: 10px;
-  background-color: transparent;
-  color : #000000;
-}
-.popupPayment .formInput {
-  margin-bottom: 20px;
-}
-.paymentFlex{
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
-}
-.popup{
-  top: 30%;
-  left: 35%;
-  background: #fffef2;
-  width: 500px;
-  height: auto
-}
-.paymentYear{
-  width: 180px;
-  margin-right: 10px;
-  margin-bottom: 30px;
-}
-.confirmBtn{
-  margin: 10px 0;
-  align-items: center;
+
+/* ===============================
+   GENERAL PAGE STYLING
+=============================== */
+body {
+    overflow-x: hidden;
+    background: #f6f8f7;
 }
 
-.b2{
-  margin-left: 70px;
-  margin-top: 90px;
+.payment-wrapper {
+    width: 90%;
+    max-width: 1100px;
+    margin: auto;
+    padding-bottom: 40px;
 }
+
+.page-title {
+    text-align: center;
+    font-size: 32px;
+    color: #2f5d4c;
+    font-weight: 800;
+    margin: 30px 0 40px;
+}
+
+/* ===============================
+   LEFT SECTION – PAYMENT OPTIONS
+=============================== */
+.payment-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.payment-box {
+    background: #ffffff;
+    padding: 28px;
+    border-radius: 16px;
+    width: 100%;
+    box-shadow: 0px 4px 18px rgba(0,0,0,0.06);
+    transition: .3s;
+}
+
+.payment-box:hover {
+    box-shadow: 0px 8px 24px rgba(0,0,0,0.12);
+}
+
+.payment-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #2f5d4c;
+}
+
+.payment-sub {
+    margin-top: 10px;
+    color: #444;
+    font-size: 18px;
+}
+
+/* Buttons */
+.pay-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 18px;
+    background: #3c6255;
+    color: white;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    margin: 18px 0;
+    transition: .3s;
+    gap: 10px;
+}
+
+.pay-btn:hover {
+    background: #508073;
+    transform: translateY(-2px);
+}
+
+/* Cash on Delivery */
+.cod-btn {
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    background: #538671;
+    color: #fff;
+    border: none;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.cod-btn:hover {
+    background: #3e6b57;
+    transform: translateY(-2px);
+}
+
+/* ===============================
+   RIGHT SIDE IMAGE
+=============================== */
+.payment-side-image {
+    width: 420px;
+    max-width: 100%;
+}
+
+.payment-side-image img {
+    width: 100%;
+    border-radius: 18px;
+}
+
+/* ===============================
+   POPUP CARD FORM
+=============================== */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.45);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.popup-card {
+    background: #ffffff;
+    width: 90%;
+    max-width: 450px;
+    padding: 28px;
+    border-radius: 20px;
+    animation: popupFade .3s ease;
+}
+
+@keyframes popupFade {
+    from { transform: scale(0.8); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+}
+
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.popup-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #2f5d4c;
+}
+
+.popup-close {
+    cursor: pointer;
+    font-size: 22px;
+    color: #444;
+}
+
+.popup-input {
+    width: 100%;
+    margin-top: 16px;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+.popup-submit {
+    width: 100%;
+    padding: 14px;
+    background: #3c6255;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    margin-top: 20px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.popup-submit:hover {
+    background: #508073;
+}
+
+/* ===============================
+   RESPONSIVENESS (ALL DEVICES)
+=============================== */
+
+/* Tablets */
+@media (max-width: 992px) {
+    .payment-container {
+        flex-direction: column;
+    }
+    .payment-side-image {
+        margin-top: 20px;
+        width: 100%;
+    }
+}
+
+/* Phones */
+@media (max-width: 600px) {
+    .page-title {
+        font-size: 26px;
+    }
+    .payment-box {
+        padding: 22px;
+    }
+    .pay-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Extra small phones */
+@media (max-width: 420px) {
+    .page-title {
+        font-size: 22px;
+    }
+    .popup-card {
+        padding: 20px;
+    }
+}
+
 </style>
-<br>
-<h1 class="textCenter">Payment Details</h1>
-<a class="darkBtn b2" href="{% url 'checkout_page' %}">&#x2190; Back</a>
-<div class="paymentFlex">
-  <div class="col popupPayment">
-    <h2>Thankyou for choosing our services</h2>
-    <h2>Choose a Payment Mode</h2><br><br>
-    <a href="#popupPayment"><i class="fa-solid fa-credit-card"></i>Debit card</a>
-  
-    <form action="/payment" method="POST">
-      {% csrf_token %}
-      <input type="submit" class="greenBtn" style="margin-top: 30px; padding-left: 40px; margin-left: -3px;" name="Confirm" value="Cash on Delivery"><i class="fa-solid fa-wallet" style=" position: absolute; margin-top: 40px; margin-left: -180px; color:#ffffff"></i>
-    </form>
 
-    
-    
-      <div class="popupContainer">
-        <div class="popupOverlay" id="popupPayment">
-          <div class="popup">
-            <div class="popHead">
-              <h2>Debit Card details</h2>
-              <a href="#" class="popupClose"><i class="fa-solid fa-x"></i></a>
-            </div><br>
+
+<h1 class="page-title">Payment Details</h1>
+
+<div class="payment-wrapper">
+
+    <div class="payment-container">
+
+        <!-- LEFT SIDE -->
+        <div class="payment-box">
+            <h2 class="payment-title">Thank you for shopping with us!</h2>
+            <p class="payment-sub">Choose your preferred payment method:</p>
+
+            <!-- Debit Card Button -->
+            <a href="#" class="pay-btn" onclick="openPopup()">
+                <i class="fa-solid fa-credit-card"></i> Pay with Debit Card
+            </a>
+
+            <!-- Cash on Delivery -->
             <form action="/payment" method="POST">
-              {% csrf_token %}
-              <!--USING NUMBER <input type="number" class="formInput" name="cardNo" placeholder="Card number" min="0000000000000001" max="9999999999999999" required><br> -->
-              <input type="text" class="formInput" name="cardNo" placeholder="Card number" maxlength="16" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required><br>
-              <input type="text" class="formInput" name="cardCvv" placeholder="CVV" maxlength="3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required>
-              <h3>Expiration date</h3> 
-              <!-- 6years 2017-2029 -->
-              <input type="number" class="formInput paymentYear" name="cardYear" placeholder="Year" min="2017" max="2029" required>
-              <input type="number" class="formInput paymentYear" name="cardMonth" placeholder="Month" min="1" max="12" required>
-              <!-- <input type="text" class="formInput paymentYear" name = "cardYear" maxlength="4" step="1" placeholder="Year" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required> max 3-5 years -->
-              <!-- <input type="text" class="formInput paymentYear" name="cardMonth" maxlength="2" step="1" placeholder="Month" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required> -->
-              
-              <input type="submit" style="margin-top: 30px;" class="greenBtn" name="Confirm" value="Confirm">
+                {% csrf_token %}
+                <button class="cod-btn" name="Confirm" value="cod">
+                    <i class="fa-solid fa-wallet"></i> Cash on Delivery
+                </button>
             </form>
-            
         </div>
+
+        <!-- RIGHT SIDE IMAGE -->
+        <div class="payment-side-image">
+            <img src="https://img.freepik.com/free-vector/flat-receiving-cashback-bonus-from-paying-online_88138-766.jpg" alt="">
         </div>
-      </div>
-    
+
     </div>
-    <img src="https://img.freepik.com/free-vector/flat-receiving-cashback-bonus-from-paying-online_88138-766.jpg?w=826&t=st=1682498450~exp=1682499050~hmac=e8854ae24fd7b9a619503499a071fd9843fed04f96c4df663c9707ca5d1e8748" alt="">
 </div>
+
+<!-- POPUP -->
+<div class="popup-overlay" id="popup">
+    <div class="popup-card">
+        <div class="popup-header">
+            <h2>Debit Card Payment</h2>
+            <span class="popup-close" onclick="closePopup()">×</span>
+        </div>
+
+        <form action="/payment" method="POST">
+            {% csrf_token %}
+
+            <input class="popup-input" name="cardNo" maxlength="16" placeholder="Card Number" required>
+            <input class="popup-input" name="cardCvv" maxlength="3" placeholder="CVV" required>
+
+            <input class="popup-input" type="number" name="cardYear" placeholder="Expiry Year" min="2024" max="2035" required>
+            <input class="popup-input" type="number" name="cardMonth" placeholder="Expiry Month" min="1" max="12" required>
+
+            <button type="submit" class="popup-submit">Confirm Payment</button>
+        </form>
+    </div>
+</div>
+
+
+<script>
+function openPopup() {
+    document.getElementById("popup").style.display = "flex";
+}
+
+function closePopup() {
+    document.getElementById("popup").style.display = "none";
+}
+</script>
+
 {% endblock %}

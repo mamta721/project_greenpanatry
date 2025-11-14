@@ -1,89 +1,174 @@
 {% extends 'store/main.html' %}
-  
 {% block content %}
 {% load cart %}
 
 <style>
-  .colFooterAdd {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 0; /* no gutters forr */
-    align-items: center;
-    font-size: 16px;
-    /* background-color: #538671; */
-    padding: 2px 3px;
-    border-radius: 15px;
-    border: none;
-    display: hidden;
-    margin-top: -30px;
-    margin-right: 60px;
-  }
-  .colFooterAdd .greenBtn{
-    padding: 8px 3px;
-    height: 33px;
-    width: 30px;
-  }
-  .cartQuantity{
-    position: absolute;
-    margin: 0 -3px 0 35px;
-    background-color: #538671;
-    width: 60px;
-    color: #ffffff;
-    padding: 7px 30px;
-    z-index: -1;
-  }
-  .negBtn{
-    margin-left: 25px;
-  }
-  .posBtn{
-    margin-left: 79px;
-  }
-  .addBtn{
-    margin-top: -30px;
-    margin-right: 15px;
-  }
+/* ========================= PRODUCT GRID LAYOUT ========================= */
+.row {
+  margin: 40px auto;
+  width: 95%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  justify-items: center;
+}
+
+.col.itemCol {
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  overflow: visible;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+  max-width: 300px;
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+.col.itemCol:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+}
+
+.thumbnail {
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  background: #f7f7f7;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.boxElement {
+  padding: 12px;
+}
+
+.itemName {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 12px 0 6px;
+}
+
+.itemPrice {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* ========================= BUTTONS ========================= */
+.colFooterAdd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.greenBtn {
+  padding: 7px 14px;
+  border-radius: 10px;
+  background-color: #538671;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+.greenBtn:hover {
+  background-color: #2f5d4c;
+}
+
+.cartQuantity {
+  background-color: #538671;
+  color: #ffffff;
+  padding: 5px 12px;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+.addBtn {
+  background-color: #538671;
+  color: #fff;
+  padding: 9px 18px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  margin-top: 8px;
+}
+
+.addBtn:hover {
+  background-color: #2f5d4c;
+}
+
+/* ========================= RESPONSIVE SETTINGS ========================= */
+@media (max-width: 992px) {
+  .thumbnail { height: 160px; }
+  .itemName { font-size: 17px; }
+  .itemPrice { font-size: 18px; }
+}
+
+@media (max-width: 768px) {
+  .row { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+  .thumbnail { height: 150px; }
+  .itemName { font-size: 16px; }
+  .itemPrice { font-size: 17px; }
+  .greenBtn, .addBtn { font-size: 14px; padding: 6px 12px; }
+}
+
+@media (max-width: 480px) {
+  .row { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+  .thumbnail { height: 130px; }
+  .itemName { font-size: 15px; }
+  .itemPrice { font-size: 16px; }
+  .greenBtn, .addBtn { font-size: 13px; padding: 6px 10px; }
+  .cartQuantity { font-size: 13px; padding: 4px 8px; }
+}
 </style>
-  <!-- items -->
-  <div class="row" style="font-size: 23px; width: 85vw">
-    {% for item in products %}
-    <div class="col itemCol" id="{{ item.id }}">
-      <img class="thumbnail" src="{{ item.image.url }}">
-      <div class="boxElement">
-        <h6 class="itemName">{{ item.name }} <br>({{ item.description }})</h6>
-        
-        <h5 class="itemPrice"><strong>Rs {{ item.price }}</strong></h5>
-      </div><br>
 
-      <div class="colFooter">
-        {% if item|is_in_cart:request.session.cart %}
-        <div class="colFooterAdd" hidden>
-          <form action="#{{item.id}}" method="POST">
-            {% csrf_token %}
-            <input hidden type="text" value="{{ item.id }}" name="productId">
-            <input hidden type="text" value="True" name="removeProduct">
-            <input type="submit" class="greenBtn negBtn" value=" - ">
-          </form>
+<!-- PRODUCT GRID -->
+<div class="row">
+  {% for item in products %}
+  <div class="col itemCol" id="{{ item.id }}">
 
-          <div class="cartQuantity textCenter">{{item|cart_quantity:request.session.cart}}&nbsp;in&nbsp;cart</div>
-          
-          <form action="#{{item.id}}" method="POST">
-            {% csrf_token %}
-            <input hidden type="text" value="{{ item.id }}" name="productId">
-            <input type="submit" class="greenBtn posBtn" value=" + ">
-          </form>
-        </div>
+    <img class="thumbnail" src="{{ item.image.url }}">
 
-        {% else %}
+    <div class="boxElement">
+      <h6 class="itemName">{{ item.name }} <br>({{ item.description }})</h6>
+      <h5 class="itemPrice">Rs {{ item.price }}</h5>
+    </div>
+
+    <div class="colFooter">
+      {% if item|is_in_cart:request.session.cart %}
+      <div class="colFooterAdd">
         <form action="#{{item.id}}" method="POST">
-          <!-- <form action="" method="POST"> -->
-            {% csrf_token %}
-            <input hidden type="text" value="{{ item.id }}" name="productId">
-            <input style="float:right" type="submit" value="Add to Cart" class="greenBtn addBtn">
-          </form>
-        {% endif %}
+          {% csrf_token %}
+          <input hidden type="text" value="{{ item.id }}" name="productId">
+          <input hidden type="text" value="True" name="removeProduct">
+          <button class="greenBtn">-</button>
+        </form>
+
+        <div class="cartQuantity">{{item|cart_quantity:request.session.cart}} in cart</div>
+
+        <form action="#{{item.id}}" method="POST">
+          {% csrf_token %}
+          <input hidden type="text" value="{{ item.id }}" name="productId">
+          <button class="greenBtn">+</button>
+        </form>
       </div>
 
+      {% else %}
+      <form action="#{{item.id}}" method="POST">
+        {% csrf_token %}
+        <input hidden type="text" value="{{ item.id }}" name="productId">
+        <button class="addBtn">Add to Cart</button>
+      </form>
+      {% endif %}
     </div>
-    {% endfor %}
+
   </div>
+  {% endfor %}
+</div>
+
 {% endblock %}

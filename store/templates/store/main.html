@@ -374,70 +374,342 @@
 .popupOverlay:target ~ #popupLink {
   display: none;
 }
+.navbar {
+  padding: 10px 25px;
+  background-color: #3C6255;
+  color: #EAE7B1;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar a {
+  margin: 0 10px;
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #edf2d3 !important;
+  text-decoration: none;
+}
+
+.navbar a:hover {
+  color: #ffffff !important;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#brandName {
+  font-size: 40px;
+  font-family: 'Lobster Two', cursive;
+  color: #edf2d3;
+}
+
+/* Hamburger (hidden by default) */
+.menu-toggle {
+  display: none;
+  font-size: 28px;
+  color: #edf2d3;
+  cursor: pointer;
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  .nav-right {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background-color: #3C6255;
+    padding: 15px 0;
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .nav-right.active {
+    display: flex;
+    animation: slideDown 0.3s ease forwards;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .nav-right a {
+    padding: 10px 0;
+    width: 100%;
+    color: #edf2d3 !important;
+  }
+
+  #brandName {
+    font-size: 32px;
+  }
+}
+@media (max-width: 768px) {
+  .nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .menu-toggle {
+    display: block;
+    align-self: flex-end;
+    margin-top: -40px;
+    font-size: 28px;
+    color: #edf2d3;
+    cursor: pointer;
+  }
+
+  .nav-right {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background-color: #3C6255;
+    text-align: center;
+    padding: 15px 0;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .nav-right.active {
+    display: flex;
+    animation: slideDown 0.3s ease forwards;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .nav-right a {
+    padding: 10px 0;
+    width: 100%;
+    color: #edf2d3 !important;
+    font-size: 18px;
+  }
+
+  #brandName {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+}
+<style>
+/* ===============================
+   GENERAL STYLING
+=============================== */
+.textCenter {
+  text-align: center;
+}
+
+h1.textCenter {
+  color: #2f5d4c;
+  font-weight: 700;
+  font-size: 32px;
+  margin-bottom: 25px;
+}
+
+.boxElement {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  padding: 25px;
+  margin-bottom: 40px;
+}
+
+.darkBtn {
+  background-color: #2f5d4c;
+  color: #fff;
+  padding: 10px 22px;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.darkBtn:hover {
+  background-color: #427a64;
+}
+
+.greenBtn {
+  background-color: #538671;
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  float: right;
+  transition: 0.3s;
+}
+
+.greenBtn:hover {
+  background-color: #366552;
+}
+
+.formInput {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  outline: none;
+}
+
+.checkoutIMG {
+  width: 70px;
+  height: 70px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.cartRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 5px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.cartRow:last-child {
+  border-bottom: none;
+}
+
+/* ===============================
+   RESPONSIVE LAYOUT
+=============================== */
+
+/* Large screens - side-by-side layout */
+.checkoutFlex {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  width: 85vw;
+  margin: auto;
+}
+
+/* Tablet screens */
+@media (max-width: 992px) {
+  .checkoutFlex {
+    flex-direction: column;
+    width: 90vw;
+  }
+
+  .shippingInfo, .orderSummary {
+    width: 100%;
+  }
+
+  h1.textCenter {
+    font-size: 28px;
+  }
+
+  .greenBtn {
+    width: 100%;
+    float: none;
+    text-align: center;
+  }
+
+  .darkBtn {
+    width: 100%;
+    display: block;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+}
+
+/* Mobile screens */
+@media (max-width: 600px) {
+  .checkoutFlex {
+    width: 95vw;
+  }
+
+  .boxElement {
+    padding: 15px;
+    box-shadow: none;
+  }
+
+  h1.textCenter {
+    font-size: 24px;
+  }
+
+  .formInput {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .cartRow {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    padding: 10px 0;
+  }
+
+  .cartRow img.checkoutIMG {
+    width: 100%;
+    max-width: 250px;
+    margin-bottom: 10px;
+  }
+
+  .cartRow div {
+    width: 100%;
+    margin-bottom: 6px;
+  }
+
+  .greenBtn {
+    width: 100%;
+  }
+}
+</style>
+
+
+
 
 </style>  
 </head>
 
 <body>
   <nav class="navbar">
-    <div class="nav">
-      <div class="nav-left">
-        <a href="{% url 'home_page' %}" id="brandName">Green Pantry</a>
-        
-      </div>
-      
-      <div class="nav-right">
-        <a href="{% url 'store_page' %}">Store</a>
-        <a href="{% url 'aboutus_page' %}">About us</a>
-        <a href="{% url 'faq_page' %}">FAQ</a>
-        <a href="{% url 'cart_page' %}">Cart
-          <!-- <i class="fa-solid fa-cart-shopping"></i> -->
-        </a>
+  <div class="nav">
+    <div class="nav-left">
+      <a href="{% url 'home_page' %}" id="brandName">Green Pantry</a>
+    </div>
+
+    <!-- Hamburger toggle -->
+    <div class="menu-toggle" id="menu-toggle">
+      <i class="fa-solid fa-bars"></i>
+    </div>
+
+    <div class="nav-right" id="nav-links">
+      <a href="{% url 'store_page' %}">Store</a>
+      <a href="{% url 'aboutus_page' %}">About us</a>
+      <a href="{% url 'faq_page' %}">FAQ</a>
+      <a href="{% url 'cart_page' %}">Cart</a>
 
       {% if request.session.customer %}
-      <!-- account info pop up start -->
       <a href="#popup" class="nav-link" id="popupLink"><i class="fa-solid fa-user"></i></a>
-        
-        <div class="popupContainer">
-          <div class="popupOverlay" id="popup">
-            <div class="popup">
-              <div class="popHead">
-                <h2 style="margin-top:20px">Account</h2>
-                <a href="#" class="popupClose"><i class="fa-solid fa-x"></i></a>
-              </div>
-              <div class="popFlex">
-                <i class="fa-solid fa-user"></i>
-                <p>{{ request.session.customerName }}</p>
-              </div>
-              <!-- <div class="popFlex">
-                <i class="fa-solid fa-envelope"></i>
-                <p>{{ request.session.customerEmail }}</p>
-              </div> -->
-              <div class="popFlex">
-                <i class="fa-solid fa-phone"></i>
-                <p>{{ request.session.customerPhone }}</p>
-              </div><br>
-              <div class="popFlex">
-                <a class="nav-link greenBtn" href="{% url 'orders_page' %}">Order history</a>
-              </div><br><br>
-              <a class="nav-link logoutBtn" href="{% url 'logout_page' %}">Log out</a>
-              </div><br>
-          </div>
-        </div>
-    <!-- account info pop up end -->
-    
-    {% else %}
-      <a class="nav-link loginbtn" href="{% url 'login_page' %}">Login</a>
-      <a class="nav-link" href="{% url 'signup_page' %}">Signup</a>
-    {% endif %}
-
-      </div>
+      {% else %}
+      <a href="{% url 'login_page' %}">Login</a>
+      <a href="{% url 'signup_page' %}">Signup</a>
+      {% endif %}
     </div>
-  </nav>
+  </div>
+</nav>
 
   {% block content %}
 <!-- ------------------------------------------------------------------------- -->
   {% endblock %}
+<script>
+  document.getElementById("menu-toggle").addEventListener("click", function() {
+    document.getElementById("nav-links").classList.toggle("active");
+    const icon = this.querySelector("i");
+    icon.classList.toggle("fa-bars");
+    icon.classList.toggle("fa-xmark");
+  });
+</script>
 
 </body>
 </html>

@@ -152,3 +152,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://project-greenpanatry-1.onrender.com",
+    "https://*.onrender.com",
+]
+ALLOWED_HOSTS = [
+    "project-greenpanatry-1.onrender.com",
+    "localhost",
+    "127.0.0.1"
+]

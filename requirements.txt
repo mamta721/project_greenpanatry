@@ -1,4 +1,7 @@
 # Django web framework
+pip==25.3
+setuptools==68.0.0
+wheel==0.41.0
 Django==4.2.1
 
 # WSGI server for deployment

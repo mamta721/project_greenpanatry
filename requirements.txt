@@ -1,3 +1,20 @@
-pip
-django
-pillow
+# Django web framework
+Django==4.2.1
+
+# WSGI server for deployment
+gunicorn==22.0.0
+
+# Database driver (PostgreSQL example)
+psycopg2-binary==2.9.9
+
+# For environment variable management
+python-dotenv==1.0.0
+
+# Optional: Pillow for image handling
+Pillow==10.1.0
+
+# Optional: django-crispy-forms if used in your templates
+django-crispy-forms==2.0.3
+
+# Optional: whitenoise to serve static files
+whitenoise==6.5.0

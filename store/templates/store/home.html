@@ -1,0 +1,429 @@
+{% extends 'store/main.html' %}
+{% block content %}
+<meta name="referrer" content="origin">
+
+<style>
+  :root {
+    --primary-color: #3C6255;
+    --secondary-color: #EAE7B1;
+    --accent-color: #538671;
+    --light-bg: #fffef2;
+    --text-dark: #2b2c30;
+  }
+  
+  .hero-section {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(234, 231, 177, 0.2) 100%);
+    padding: 100px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .hero-section::before {
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: rgba(64, 128, 55, 0.1);
+    top: -300px;
+    left: -200px;
+    z-index: -1;
+  }
+  
+  .hero-section::after {
+    content: '';
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: rgba(64, 128, 55, 0.1);
+    bottom: -200px;
+    right: -100px;
+    z-index: -1;
+  }
+  
+  .hero-title {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 3.5rem;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 2rem;
+    max-width: 600px;
+  }
+  
+  .hero-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    transform: perspective(1000px) rotateY(-5deg);
+    transition: transform 0.5s ease;
+  }
+  
+  .hero-image:hover {
+    transform: perspective(1000px) rotateY(0deg);
+  }
+  
+  .features-section {
+    padding: 100px 0;
+    background: linear-gradient(to bottom, white, rgba(173, 173, 173, 0.1), var(--primary-color));
+  }
+  
+  .feature-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s ease;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: var(--accent-color);
+    transform: scaleX(0);
+    transition: transform 0.4s ease;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+  
+  .feature-card:hover::before {
+    transform: scaleX(1);
+  }
+  
+  .feature-img {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 20px;
+    border: 3px solid var(--secondary-color);
+    transition: all 0.4s ease;
+  }
+  
+  .feature-card:hover .feature-img {
+    transform: scale(1.05);
+    border-color: var(--accent-color);
+  }
+  
+  .feature-title {
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+  }
+  
+  .about-section {
+    padding: 100px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .about-content {
+    background: rgba(197, 197, 197, 0.7);
+    padding: 50px;
+    border-radius: 20px;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .about-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    transform: perspective(1000px) rotateY(5deg);
+    transition: transform 0.5s ease;
+  }
+  
+  .about-image:hover {
+    transform: perspective(1000px) rotateY(0deg);
+  }
+  
+  .reviews-section {
+    padding: 80px 0;
+    background-color: var(--light-bg);
+  }
+  
+  .section-title {
+    font-weight: 700;
+    margin-bottom: 3rem;
+    text-align: center;
+    color: var(--primary-color);
+  }
+  
+  .review-card {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    height: 100%;
+    border-top: 4px solid transparent;
+  }
+  
+  .review-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+    border-top-color: var(--accent-color);
+  }
+  
+  .review-text {
+    font-style: italic;
+    margin-bottom: 20px;
+    color: #555;
+  }
+  
+  .reviewer-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .reviewer-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+  }
+  
+  .reviewer-details p {
+    margin: 0;
+  }
+  
+  .reviewer-name {
+    font-weight: 600;
+    color: var(--primary-color);
+  }
+  
+  .review-date {
+    font-size: 0.9rem;
+    color: #777;
+  }
+  
+  /* Animation classes */
+  .fade-in-up {
+    animation: fadeInUp 0.8s ease-out;
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .delay-1 {
+    animation-delay: 0.2s;
+  }
+  
+  .delay-2 {
+    animation-delay: 0.4s;
+  }
+  
+  .delay-3 {
+    animation-delay: 0.6s;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 2.5rem;
+    }
+    
+    .hero-image, .about-image {
+      transform: none;
+      margin-top: 30px;
+    }
+    
+    .about-content {
+      padding: 30px;
+    }
+    
+    .feature-card {
+      margin-bottom: 30px;
+    }
+  }
+</style>
+
+<div class="container-fluid p-0">
+  {% if successMsg %}
+    <div class="alert alert-success alert-dismissible fade show m-3" role="alert">
+      {{ successMsg }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endif %}
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 fade-in-up">
+          <h1 class="hero-title">
+            <span class="d-block">EAT HEALTHY</span>
+            <span class="d-block" style="color: #006340;">STAY HEALTHY</span>
+          </h1>
+          <p class="hero-subtitle">
+            Our vegetables are so fresh, they practically jump off the page and onto your plate. From leafy greens to juicy tomatoes, your taste buds dance with joy. Promise &#128513
+          </p>
+          <a href="{% url 'store_page' %}" class="btn dark-btn btn-lg">Start Shopping</a>
+        </div>
+        <div class="col-lg-6 fade-in-up delay-1">
+          <img src="https://img.freepik.com/free-vector/vegetables-concept-illustration_114360-12366.jpg?size=626&ext=jpg&ga=GA1.1.1047322870.1676297463&semt=ais" 
+               alt="Fresh Vegetables" class="hero-image img-fluid">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="feature-card fade-in-up">
+            <img src="https://img.freepik.com/premium-vector/sprinkle-fresh-summer-salad-greens-vegetables-deep-plate-flying-salad-recipe_532973-238.jpg?size=626&ext=jpg&ga=GA1.1.1536630590.1680854130&semt=ais" 
+                 alt="Fresh Vegetables" class="feature-img">
+            <h3 class="feature-title">Fresh Vegetables</h3>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="feature-card fade-in-up delay-1">
+            <img src="https://img.freepik.com/premium-vector/eco-shopping-bag-with-vegetables-fruits-healthy-drinks-dairy-food-reusable-eco-friendly-shopper-net-zero-waste-plastic-free-concept-flat-trendy-design_275421-1993.jpg?size=626&ext=jpg&ga=GA1.1.1536630590.1680854130&semt=ais" 
+                 alt="Eco Friendly Packaging" class="feature-img">
+            <h3 class="feature-title">Eco Friendly Packaging</h3>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="feature-card fade-in-up delay-2">
+            <img src="https://img.freepik.com/premium-vector/girl-picks-tomatoes-from-branchharvest-concepthand-drawn-flat-vector-illustration-isolated-white-background_348404-563.jpg?size=626&ext=jpg&ga=GA1.1.1536630590.1680854130&semt=ais" 
+                 alt="Locally Grown" class="feature-img">
+            <h3 class="feature-title">Locally Grown</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 mb-4 mb-lg-0">
+          <div class="about-content fade-in-up">
+            <h2 class="mb-4">About Us</h2>
+            <p class="mb-4">
+              Our vegetable selling website offers a wide range of fresh and organic vegetables, grown using sustainable farming practices. We are committed to providing high-quality produce at affordable prices, with fast and reliable shipping. Green Pantry is easy to navigate. We Provide a secure platform for you to get fresh and healthy vegetables grown with love by out local farmers. With our commitment to quality and customer satisfaction, we aim to be your go-to source for fresh, organic vegetables.
+            </p>
+            <a href="{% url 'aboutus_page' %}" class="btn dark-btn">Read More</a>
+          </div>
+        </div>
+        <div class="col-lg-6 fade-in-up delay-1">
+          <img src="https://img.freepik.com/free-vector/business-people-sharing-ideas_52683-28608.jpg?size=626&ext=jpg&ga=GA1.1.1536630590.1680854130&semt=ais" 
+               alt="About Us" class="about-image img-fluid">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews Section -->
+  <section class="reviews-section">
+    <div class="container">
+      <h2 class="section-title">
+        <i class="fas fa-star me-2"></i>
+        <i class="fas fa-star me-2"></i>
+        Customer Reviews
+        <i class="fas fa-star ms-2"></i>
+        <i class="fas fa-star ms-2"></i>
+      </h2>
+      <div class="row">
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="review-card fade-in-up">
+            <p class="review-text">
+              The first-time purchase discount was a great way to save money while trying out this website for fresh vegetables. I was very happy with my order.
+            </p>
+            <div class="reviewer-info">
+              <img src="https://cdn-icons-png.flaticon.com/512/666/666201.png" alt="Hetal Mehta" class="reviewer-img">
+              <div class="reviewer-details">
+                <p class="reviewer-name">Hetal Mehta</p>
+                <p class="review-date">2 weeks ago</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="review-card fade-in-up delay-1">
+            <p class="review-text">
+              The packaging used for my order was eco-friendly and made me feel good about supporting a business that prioritizes sustainability.
+            </p>
+            <div class="reviewer-info">
+              <img src="https://cdn-icons-png.flaticon.com/512/666/666201.png" alt="Adi Varma" class="reviewer-img">
+              <div class="reviewer-details">
+                <p class="reviewer-name">Adi Varma</p>
+                <p class="review-date">1 Month ago</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="review-card fade-in-up delay-2">
+            <p class="review-text">
+              I had a great experience shopping on this website and would highly recommend it to others looking for high-quality vegetables. I will definitely be a returning customer!
+            </p>
+            <div class="reviewer-info">
+              <img src="https://cdn-icons-png.flaticon.com/512/666/666201.png" alt="Vinit Patel" class="reviewer-img">
+              <div class="reviewer-details">
+                <p class="reviewer-name">Vinit Patel</p>
+                <p class="review-date">1 Month ago</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Include Footer Component -->
+{% include 'store/footer.html' %}
+
+<script>
+  // Initialize animations on scroll
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add scroll animation to elements
+    const animatedElements = document.querySelectorAll('.fade-in-up');
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate__animated', 'animate__fadeInUp');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    animatedElements.forEach(el => {
+      observer.observe(el);
+    });
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,337 @@
+{% extends 'store/main.html' %}
+{% block content %}
+
+<style>
+  :root {
+    --primary-color: #3C6255;
+    --secondary-color: #EAE7B1;
+    --accent-color: #538671;
+    --light-bg: #fffef2;
+  }
+  
+  .about-hero {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    color: white;
+    padding: 100px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .about-hero::before {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    top: -150px;
+    right: -150px;
+  }
+  
+  .about-hero::after {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    bottom: -100px;
+    left: -100px;
+  }
+  
+  .hero-content {
+    position: relative;
+    z-index: 2;
+  }
+  
+  .about-content {
+    padding: 80px 0;
+    background-color: var(--light-bg);
+  }
+  
+  .content-card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+  }
+  
+  .feature-icon {
+    font-size: 3rem;
+    color: var(--accent-color);
+    margin-bottom: 20px;
+  }
+  
+  .feature-card {
+    text-align: center;
+    padding: 30px 20px;
+    border-radius: 15px;
+    background: white;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    height: 100%;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+  
+  .team-section {
+    padding: 80px 0;
+    background: white;
+  }
+  
+  .team-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    margin-bottom: 30px;
+  }
+  
+  .team-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  }
+  
+  .team-img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+  }
+  
+  .team-info {
+    padding: 25px;
+    text-align: center;
+  }
+  
+  .team-name {
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+  }
+  
+  .team-role {
+    color: #666;
+    margin-bottom: 15px;
+  }
+  
+  .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .social-links a {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+  }
+  
+  .social-links a:hover {
+    color: var(--accent-color);
+    transform: translateY(-3px);
+  }
+  
+  .stats-section {
+    padding: 80px 0;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    color: white;
+  }
+  
+  .stat-item {
+    text-align: center;
+  }
+  
+  .stat-number {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  
+  .stat-label {
+    font-size: 1.1rem;
+    opacity: 0.9;
+  }
+  
+  .back-to-shopping {
+    margin: 40px 0;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .about-hero {
+      padding: 60px 0;
+    }
+    
+    .content-card {
+      padding: 25px;
+    }
+    
+    .feature-card {
+      margin-bottom: 20px;
+    }
+  }
+</style>
+
+<!-- AOS CSS -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<div class="container-fluid p-0">
+  <!-- Back to Shopping Button -->
+  <div class="container back-to-shopping">
+    <a class="btn dark-btn" href="{% url 'store_page' %}">
+      <i class="fas fa-arrow-left me-2"></i>Continue Shopping
+    </a>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="about-hero">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 mx-auto text-center hero-content">
+          <h1 class="display-4 fw-bold mb-4" data-aos="fade-up">About Green Pantry</h1>
+          <p class="lead mb-0" data-aos="fade-up" data-aos-delay="200">
+            Fresh, Organic Vegetables Delivered to Your Doorstep
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Section -->
+  <section class="about-content">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-10">
+          <div class="content-card" data-aos="fade-up">
+            <h2 class="mb-4" data-aos="fade-right">Our Story</h2>
+            <p class="mb-4" data-aos="fade-up" data-aos-delay="100">
+              Our vegetable selling website offers a wide range of fresh and organic vegetables, grown using sustainable farming practices. We are committed to providing high-quality produce at affordable prices, with fast and reliable shipping. Green Pantry is easy to navigate. We Provide a secure platform for you to get fresh and healthy vegetables grown with love by our local farmers. With our commitment to quality and customer satisfaction, we aim to be your go-to source for fresh, organic vegetables.
+            </p>
+            
+            <h3 class="mb-3" data-aos="fade-right" data-aos-delay="200">Our Secret to Freshness</h3>
+            <p class="mb-4" data-aos="fade-up" data-aos-delay="300">
+              Ethylene absorption! Ethylene is a natural gas that vegetables produce as they ripen, and it can cause them to spoil quickly. But with our innovative ethylene absorption method, we remove this gas from our produce storage and delivery processes, resulting in longer-lasting, fresher veggies for you and your family to enjoy.
+            </p>
+            
+            <p data-aos="fade-up" data-aos-delay="400">
+              Shop now to see the difference for yourself, and take advantage of our vegetables, all at affordable prices. Plus, with our fast and convenient delivery options, you can have fresh produce delivered straight to your doorstep in no time. Thank you for choosing us as your trusted source for healthy, high-quality vegetables.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Features Grid -->
+      <div class="row mt-5">
+        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+          <div class="feature-card">
+            <i class="fas fa-leaf feature-icon"></i>
+            <h4>100% Organic</h4>
+            <p>All our vegetables are grown using sustainable and organic farming practices.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+          <div class="feature-card">
+            <i class="fas fa-truck feature-icon"></i>
+            <h4>Fast Delivery</h4>
+            <p>Fresh produce delivered to your doorstep within hours of harvesting.</p>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+          <div class="feature-card">
+            <i class="fas fa-recycle feature-icon"></i>
+            <h4>Eco-Friendly</h4>
+            <p>Sustainable packaging and environmentally conscious practices.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3 col-6 mb-4" data-aos="zoom-in">
+          <div class="stat-item">
+            <div class="stat-number">500+</div>
+            <div class="stat-label">Happy Customers</div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6 mb-4" data-aos="zoom-in" data-aos-delay="100">
+          <div class="stat-item">
+            <div class="stat-number">50+</div>
+            <div class="stat-label">Farm Partners</div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6 mb-4" data-aos="zoom-in" data-aos-delay="200">
+          <div class="stat-item">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">Organic Products</div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6 mb-4" data-aos="zoom-in" data-aos-delay="300">
+          <div class="stat-item">
+            <div class="stat-number">24/7</div>
+            <div class="stat-label">Customer Support</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team Section -->
+  <section class="team-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 text-center mb-5">
+          <h2 data-aos="fade-up">Meet Our Team</h2>
+          <p class="lead" data-aos="fade-up" data-aos-delay="100">The passionate people behind Green Pantry</p>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+          <div class="team-card">
+            <img src="https://media.licdn.com/dms/image/D5603AQGdsF91gk-aFg/profile-displayphoto-shrink_800_800/0/1666881988490?e=1686787200&v=beta&t=H2Qnvga59u85lKChRBujlSWBqJujmWqVNTWAxBHa3kE" 
+                 alt="Pooja Jadhav" class="team-img">
+            <div class="team-info">
+              <h4 class="team-name">Pooja Jadhav</h4>
+              <p class="team-role">Founder & Student</p>
+              <div class="social-links">
+                <a href="https://www.linkedin.com/in/poojadhav/" target="_blank" title="LinkedIn">
+                  <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="https://github.com/Poojadhav313" target="_blank" title="GitHub">
+                  <i class="fab fa-github"></i>
+                </a>
+                <a href="https://www.instagram.com/jadhav.pooja03/" target="_blank" title="Instagram">
+                  <i class="fab fa-instagram"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- AOS JS -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  // Initialize AOS
+  document.addEventListener('DOMContentLoaded', function() {
+    AOS.init({
+      duration: 800,
+      once: true,
+      offset: 100
+    });
+  });
+</script>
+
+{% include 'store/footer.html' %}
+{% endblock %}

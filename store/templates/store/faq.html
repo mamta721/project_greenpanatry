@@ -1,0 +1,725 @@
+{% extends 'store/main.html' %}
+{% block content %}
+
+<style>
+  :root {
+    --primary-color: #3C6255;
+    --secondary-color: #EAE7B1;
+    --accent-color: #538671;
+    --light-bg: #fffef2;
+    --dark-text: #2b2c30;
+    --light-text: #6c757d;
+    --border-color: #e9ecef;
+    --shadow-light: 0 5px 15px rgba(0, 0, 0, 0.08);
+    --shadow-medium: 0 10px 30px rgba(0, 0, 0, 0.12);
+  }
+  
+  .faq-hero {
+    background: linear-gradient(135deg, var(--light-bg) 0%, rgba(234, 231, 177, 0.3) 100%);
+    padding: 100px 0 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .faq-shape-1 {
+    position: absolute;
+    background: linear-gradient(135deg, rgba(64, 128, 55, 0.15) 0%, rgba(83, 134, 113, 0.1) 100%);
+    height: 400px;
+    width: 400px;
+    border-radius: 50%;
+    top: -150px;
+    left: -100px;
+    z-index: 1;
+  }
+  
+  .faq-shape-2 {
+    position: absolute;
+    background: linear-gradient(135deg, rgba(234, 231, 177, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+    height: 300px;
+    width: 300px;
+    border-radius: 50%;
+    bottom: -100px;
+    right: -50px;
+    z-index: 1;
+  }
+  
+  .faq-container {
+    position: relative;
+    z-index: 2;
+  }
+  
+  .hero-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--dark-text);
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.3rem;
+    color: var(--light-text);
+    margin-bottom: 40px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .continue-shopping-btn {
+    background: var(--dark-text);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(44, 62, 80, 0.2);
+  }
+  
+  .continue-shopping-btn:hover {
+    background: #34495E;
+    color: white;
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(44, 62, 80, 0.3);
+  }
+  
+  .faq-content {
+    padding: 80px 0;
+  }
+  
+  .search-box {
+    position: relative;
+    max-width: 500px;
+    margin: 0 auto 50px;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 15px 50px 15px 20px;
+    border: 2px solid var(--border-color);
+    border-radius: 50px;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    background: white;
+    box-shadow: var(--shadow-light);
+  }
+  
+  .search-input:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(83, 134, 113, 0.1);
+    outline: none;
+  }
+  
+  .search-icon {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--light-text);
+    font-size: 1.2rem;
+  }
+  
+  .category-filter {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+  
+  .category-btn {
+    background: white;
+    border: 2px solid var(--border-color);
+    border-radius: 25px;
+    padding: 8px 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--light-text);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .category-btn.active,
+  .category-btn:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+  }
+  
+  .faq-accordion {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  .faq-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: var(--shadow-light);
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .faq-card:hover {
+    box-shadow: var(--shadow-medium);
+    transform: translateY(-2px);
+  }
+  
+  .faq-question {
+    padding: 25px 30px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background: white;
+    border: none;
+    width: 100%;
+    text-align: left;
+    transition: all 0.3s ease;
+  }
+  
+  .faq-question:hover {
+    background: rgba(83, 134, 113, 0.05);
+  }
+  
+  .faq-question.active {
+    background: rgba(83, 134, 113, 0.08);
+  }
+  
+  .question-content {
+    flex: 1;
+    padding-right: 20px;
+  }
+  
+  .question-number {
+    background: var(--primary-color);
+    color: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    margin-right: 15px;
+    flex-shrink: 0;
+    font-size: 0.9rem;
+  }
+  
+  .question-text {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin: 0;
+    line-height: 1.4;
+  }
+  
+  .toggle-icon {
+    color: var(--accent-color);
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+  
+  .faq-question.active .toggle-icon {
+    transform: rotate(180deg);
+  }
+  
+  .faq-answer {
+    padding: 0 30px;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    background: white;
+  }
+  
+  .faq-answer.show {
+    padding: 0 30px 25px;
+    max-height: 1000px;
+  }
+  
+  .answer-text {
+    font-size: 1.1rem;
+    color: var(--light-text);
+    line-height: 1.7;
+    margin: 0;
+    padding: 15px 0 0;
+    border-top: 1px solid var(--border-color);
+  }
+  
+  .no-results {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--light-text);
+  }
+  
+  .no-results-icon {
+    font-size: 4rem;
+    color: #ddd;
+    margin-bottom: 20px;
+  }
+  
+  .contact-section {
+    background: var(--light-bg);
+    padding: 80px 0;
+    margin-top: 40px;
+  }
+  
+  .contact-card {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: var(--shadow-light);
+    height: 100%;
+    transition: all 0.3s ease;
+  }
+  
+  .contact-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-medium);
+  }
+  
+  .contact-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.8rem;
+    margin: 0 auto 20px;
+  }
+  
+  .contact-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--dark-text);
+    margin-bottom: 10px;
+  }
+  
+  .contact-text {
+    color: var(--light-text);
+    margin-bottom: 0;
+  }
+  
+  /* Animation Classes */
+  .fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  
+  .fade-in-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .bounce-in {
+    animation: bounceIn 0.6s ease;
+  }
+  
+  @keyframes bounceIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.3);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+    70% {
+      transform: scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  .pulse {
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .faq-hero {
+      padding: 80px 0 40px;
+    }
+    
+    .hero-title {
+      font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.1rem;
+    }
+    
+    .faq-question {
+      padding: 20px;
+    }
+    
+    .question-text {
+      font-size: 1.1rem;
+    }
+    
+    .faq-answer.show {
+      padding: 0 20px 20px;
+    }
+    
+    .answer-text {
+      font-size: 1rem;
+    }
+    
+    .faq-shape-1 {
+      height: 250px;
+      width: 250px;
+      top: -100px;
+      left: -80px;
+    }
+    
+    .faq-shape-2 {
+      height: 200px;
+      width: 200px;
+      bottom: -80px;
+      right: -40px;
+    }
+    
+    .contact-section {
+      padding: 60px 0;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .faq-hero {
+      padding: 60px 0 30px;
+    }
+    
+    .hero-title {
+      font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1rem;
+    }
+    
+    .faq-question {
+      padding: 15px;
+    }
+    
+    .question-text {
+      font-size: 1rem;
+    }
+    
+    .question-number {
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+      font-size: 0.8rem;
+    }
+    
+    .toggle-icon {
+      font-size: 1rem;
+    }
+    
+    .contact-section {
+      padding: 40px 0;
+    }
+    
+    .contact-card {
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .contact-icon {
+      width: 60px;
+      height: 60px;
+      font-size: 1.5rem;
+    }
+    
+    .category-filter {
+      gap: 8px;
+    }
+    
+    .category-btn {
+      padding: 6px 15px;
+      font-size: 0.8rem;
+    }
+  }
+</style>
+
+<div class="container-fluid p-0">
+  <!-- FAQ Hero Section -->
+  <section class="faq-hero">
+    <div class="faq-shape-1"></div>
+    <div class="faq-shape-2"></div>
+    
+    <div class="container faq-container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10 text-center">
+          <h1 class="hero-title fade-in-up">
+            Frequently Asked Questions
+          </h1>
+          <p class="hero-subtitle fade-in-up">
+            Find quick answers to common questions about our products, shipping, returns, and more. 
+            Can't find what you're looking for? Contact our support team.
+          </p>
+          
+          <!-- Back to Shopping -->
+          <div class="fade-in-up">
+            <a href="{% url 'store_page' %}" class="continue-shopping-btn">
+              <i class="fas fa-arrow-left me-2"></i>Continue Shopping
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Content Section -->
+  <section class="faq-content">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+          <!-- Search Box -->
+          <div class="search-box fade-in-up">
+            <input type="text" class="search-input" placeholder="Search for questions..." id="faqSearch">
+            <i class="fas fa-search search-icon"></i>
+          </div>
+          
+          <!-- Category Filters -->
+          <!-- <div class="category-filter fade-in-up">
+            <button class="category-btn active" data-category="all">All Questions</button>
+            <button class="category-btn" data-category="shipping">Shipping</button>
+            <button class="category-btn" data-category="returns">Returns</button>
+            <button class="category-btn" data-category="products">Products</button>
+            <button class="category-btn" data-category="payment">Payment</button>
+          </div> -->
+
+          <!-- FAQ Accordion -->
+          <div class="faq-accordion" id="faqAccordion">
+            {% for que in ques %}
+            <div class="faq-card fade-in-up" data-category="general">
+              <button class="faq-question" onclick="toggleFAQ(this)">
+                <div class="d-flex align-items-start w-100">
+                  <div class="question-number">{{ forloop.counter }}</div>
+                  <div class="question-content">
+                    <h3 class="question-text">{{ que.que }}</h3>
+                  </div>
+                  <i class="fas fa-chevron-down toggle-icon"></i>
+                </div>
+              </button>
+              
+              <div class="faq-answer" id="answer{{ forloop.counter }}">
+                <p class="answer-text">{{ que.ans }}</p>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+
+          <!-- No Results Message -->
+          <div id="noResults" class="no-results" style="display: none;">
+            <div class="no-results-icon">
+              <i class="fas fa-search"></i>
+            </div>
+            <h3>No questions found</h3>
+            <p>Try searching with different keywords or browse all questions</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="contact-section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10 text-center mb-5">
+          <h2 class="fade-in-up">Still Have Questions?</h2>
+          <p class="hero-subtitle fade-in-up">
+            Our support team is here to help you with any questions or concerns
+          </p>
+        </div>
+      </div>
+      
+      <div class="row g-4">
+        <div class="col-12 col-md-4 fade-in-up">
+          <div class="contact-card">
+            <div class="contact-icon">
+              <i class="fas fa-phone-alt"></i>
+            </div>
+            <h3 class="contact-title">Call Us</h3>
+            <p class="contact-text">+1 (555) 123-4567<br>Mon-Fri, 9AM-6PM</p>
+          </div>
+        </div>
+        
+        <div class="col-12 col-md-4 fade-in-up">
+          <div class="contact-card">
+            <div class="contact-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <h3 class="contact-title">Email Us</h3>
+            <p class="contact-text">support@freshveggies.com<br>We reply within 24 hours</p>
+          </div>
+        </div>
+        
+        <div class="col-12 col-md-4 fade-in-up">
+          <div class="contact-card">
+            <div class="contact-icon">
+              <i class="fas fa-comments"></i>
+            </div>
+            <h3 class="contact-title">Live Chat</h3>
+            <p class="contact-text">Available 24/7<br>Get instant answers</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  // FAQ Toggle Function
+  function toggleFAQ(button) {
+    const faqCard = button.closest('.faq-card');
+    const answer = faqCard.querySelector('.faq-answer');
+    const toggleIcon = button.querySelector('.toggle-icon');
+    
+    // Toggle active class
+    button.classList.toggle('active');
+    
+    // Toggle answer visibility
+    if (answer.classList.contains('show')) {
+      answer.classList.remove('show');
+    } else {
+      answer.classList.add('show');
+    }
+    
+    // Rotate icon
+    toggleIcon.style.transform = button.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0deg)';
+  }
+
+  // Initialize animations and functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    // Scroll animation for elements
+    const animatedElements = document.querySelectorAll('.fade-in-up');
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { 
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    });
+    
+    animatedElements.forEach(el => {
+      observer.observe(el);
+    });
+
+    // FAQ Search Functionality
+    const searchInput = document.getElementById('faqSearch');
+    const faqCards = document.querySelectorAll('.faq-card');
+    const noResults = document.getElementById('noResults');
+    
+    searchInput.addEventListener('input', function() {
+      const searchTerm = this.value.toLowerCase();
+      let visibleCount = 0;
+      
+      faqCards.forEach(card => {
+        const question = card.querySelector('.question-text').textContent.toLowerCase();
+        const answer = card.querySelector('.answer-text').textContent.toLowerCase();
+        
+        if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+          card.style.display = 'block';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+      
+      // Show/hide no results message
+      if (visibleCount === 0 && searchTerm.length > 0) {
+        noResults.style.display = 'block';
+      } else {
+        noResults.style.display = 'none';
+      }
+    });
+
+    // Category Filter Functionality
+    const categoryButtons = document.querySelectorAll('.category-btn');
+    
+    categoryButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // Remove active class from all buttons
+        categoryButtons.forEach(btn => btn.classList.remove('active'));
+        // Add active class to clicked button
+        this.classList.add('active');
+        
+        const category = this.getAttribute('data-category');
+        
+        // Filter FAQ cards
+        faqCards.forEach(card => {
+          if (category === 'all' || card.getAttribute('data-category') === category) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Add smooth scroll to FAQ items when searching
+    searchInput.addEventListener('keyup', function(e) {
+      if (e.key === 'Enter' && this.value.length > 0) {
+        const firstVisibleCard = document.querySelector('.faq-card[style="display: block"]');
+        if (firstVisibleCard) {
+          firstVisibleCard.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'center'
+          });
+        }
+      }
+    });
+
+    // Auto-open first FAQ item on page load
+    const firstFaqQuestion = document.querySelector('.faq-question');
+    if (firstFaqQuestion) {
+      setTimeout(() => {
+        toggleFAQ(firstFaqQuestion);
+      }, 1000);
+    }
+  });
+</script>
+
+<!-- Include Footer Component -->
+{% include 'store/footer.html' %}
+
+{% endblock %}

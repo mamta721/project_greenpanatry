@@ -1,0 +1,329 @@
+<!-- footer.html -->
+<style>
+  .footer-section {
+    background-color: #3C6255;
+    color: white;
+    padding: 70px 0 30px;
+    position: relative;
+  }
+  
+  .footer-logo {
+    font-family: 'Lobster Two', cursive;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    display: block;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  
+  .footer-logo:hover {
+    color: #EAE7B1;
+    text-decoration: none;
+  }
+  
+  .footer-links h5 {
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #EAE7B1;
+    font-size: 1.2rem;
+  }
+  
+  .footer-links a {
+    color: white;
+    display: block;
+    margin-bottom: 12px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-size: 1rem;
+  }
+  
+  .footer-links a:hover {
+    color: #EAE7B1;
+    transform: translateX(5px);
+    text-decoration: none;
+  }
+  
+  .contact-details h5,
+  .contact-form h5 {
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #EAE7B1;
+    font-size: 1.2rem;
+  }
+  
+  .contact-details p {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+  }
+  
+  .contact-details i {
+    width: 20px;
+    margin-right: 10px;
+    color: #EAE7B1;
+  }
+  
+  .social-icons {
+    margin-top: 20px;
+  }
+  
+  .social-icons a {
+    color: white;
+    font-size: 1.4rem;
+    margin-right: 20px;
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+  
+  .social-icons a:hover {
+    color: #EAE7B1;
+    transform: translateY(-3px);
+  }
+  
+  .contact-form .form-control {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    color: white;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+  }
+  
+  .contact-form .form-control:focus {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: #EAE7B1;
+    box-shadow: 0 0 0 2px rgba(234, 231, 177, 0.2);
+    color: white;
+  }
+  
+  .contact-form .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .contact-form .btn-submit {
+    background: linear-gradient(135deg, #EAE7B1, #538671);
+    border: none;
+    color: #2b2c30;
+    padding: 12px 30px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    width: 100%;
+    font-size: 1rem;
+  }
+  
+  .contact-form .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 20px;
+    margin-top: 40px;
+    text-align: center;
+  }
+  
+  .footer-bottom p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+  }
+  
+  /* Animation classes */
+  .fade-in-up {
+    animation: fadeInUp 0.8s ease-out;
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .delay-1 {
+    animation-delay: 0.2s;
+  }
+  
+  .delay-2 {
+    animation-delay: 0.4s;
+  }
+  
+  .delay-3 {
+    animation-delay: 0.6s;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .footer-section {
+      padding: 50px 0 20px;
+    }
+    
+    .footer-logo {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .footer-links,
+    .contact-details,
+    .contact-form {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .social-icons {
+      justify-content: center;
+    }
+    
+    .contact-details p {
+      justify-content: center;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .footer-section {
+      padding: 40px 0 20px;
+    }
+    
+    .footer-logo {
+      font-size: 1.8rem;
+    }
+    
+    .footer-links h5,
+    .contact-details h5,
+    .contact-form h5 {
+      font-size: 1.1rem;
+    }
+    
+    .social-icons a {
+      font-size: 1.3rem;
+      margin-right: 15px;
+    }
+  }
+</style>
+
+<footer class="footer-section">
+  <div class="container">
+    <div class="row">
+      <!-- Brand Column -->
+      <div class="col-lg-3 col-md-6 mb-4 fade-in-up">
+        <a href="{% url 'home_page' %}" class="footer-logo">Green Pantry</a>
+        <p style="color: rgba(255, 255, 255, 0.8); font-size: 1rem;">
+          Fresh, organic vegetables delivered to your doorstep. Quality you can taste, service you can trust.
+        </p>
+      </div>
+      
+      <!-- Quick Links Column -->
+      <div class="col-lg-3 col-md-6 mb-4 fade-in-up delay-1">
+        <div class="footer-links">
+          <h5>Quick Links</h5>
+          <a href="{% url 'home_page' %}">
+            <i class="fas fa-home me-2"></i>Home
+          </a>
+          <a href="{% url 'aboutus_page' %}">
+            <i class="fas fa-info-circle me-2"></i>About Us
+          </a>
+          <a href="{% url 'faq_page' %}">
+            <i class="fas fa-question-circle me-2"></i>FAQ
+          </a>
+          <a href="{% url 'store_page' %}">
+            <i class="fas fa-store me-2"></i>Shop
+          </a>
+        </div>
+      </div>
+      
+      <!-- Contact Details Column -->
+      <div class="col-lg-3 col-md-6 mb-4 fade-in-up delay-2">
+        <div class="contact-details">
+          <h5>Contact Details</h5>
+          <p>
+            <i class="fas fa-phone"></i>
+            <span>8876234873</span>
+          </p>
+          <p>
+            <i class="fas fa-location-dot"></i>
+            <span>Radha road, Pune, Maharashtra</span>
+          </p>
+          <p>
+            <i class="fas fa-envelope"></i>
+            <span>info@greenpantry.com</span>
+          </p>
+          <div class="social-icons d-flex">
+            <a href="https://www.linkedin.com/in/poojadhav/" target="_blank" title="LinkedIn">
+              <i class="fab fa-linkedin"></i>
+            </a>
+            <a href="https://www.facebook.com" target="_blank" title="Facebook">
+              <i class="fab fa-facebook"></i>
+            </a>
+            <a href="https://www.instagram.com" target="_blank" title="Instagram">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://www.twitter.com" target="_blank" title="Twitter">
+              <i class="fab fa-twitter"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Contact Form Column -->
+      <div class="col-lg-3 col-md-6 mb-4 fade-in-up delay-3">
+        <div class="contact-form">
+          <h5>Contact Us</h5>
+          <p class="mb-3" style="color: rgba(255, 255, 255, 0.8);">Let us know more about you</p>
+          <form method="POST">
+            {% csrf_token %}
+            <input type="text" class="form-control mb-2" name="name" placeholder="Enter Name" required>
+            <input type="email" class="form-control mb-2" name="email" placeholder="Enter Email" required>
+            <textarea class="form-control mb-3" name="msg" maxlength="100" rows="3" placeholder="Enter Message" required></textarea>
+            <button type="submit" class="btn btn-submit">
+              <i class="fas fa-paper-plane me-2"></i>Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+      <p>&copy; 2024 Green Pantry. All rights reserved. | Fresh Vegetables Delivered with Love</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Footer animations
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add scroll animation to footer elements
+    const footerElements = document.querySelectorAll('.fade-in-up');
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { 
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    });
+    
+    footerElements.forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(30px)';
+      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      observer.observe(el);
+    });
+  });
+</script>

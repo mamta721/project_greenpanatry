@@ -1,0 +1,621 @@
+{% extends 'store/main.html' %}
+{% block content %}
+{% load cart %}
+
+<style>
+  :root {
+    --primary-color: #3C6255;
+    --secondary-color: #EAE7B1;
+    --accent-color: #538671;
+    --light-bg: #fffef2;
+    --dark-text: #2C3E50;
+    --light-text: #7F8C8D;
+    --border-color: #E8E8E8;
+  }
+  
+  .checkout-hero {
+    background: linear-gradient(135deg, var(--light-bg) 0%, rgba(234, 231, 177, 0.3) 100%);
+    padding: 60px 0 40px;
+    margin-bottom: 40px;
+  }
+  
+  .checkout-container {
+    padding: 0 15px;
+  }
+  
+  .checkout-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 30px;
+    transition: all 0.3s ease;
+  }
+  
+  .checkout-header {
+    background: var(--primary-color);
+    color: white;
+    padding: 20px 30px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .form-group {
+    margin-bottom: 25px;
+  }
+  
+  .form-label {
+    font-weight: 600;
+    color: var(--dark-text);
+    margin-bottom: 8px;
+    display: block;
+  }
+  
+  .form-control-custom {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: #f9f9f9;
+  }
+  
+  .form-control-custom:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(83, 134, 113, 0.1);
+    background-color: white;
+    outline: none;
+  }
+  
+  .order-item {
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+  }
+  
+  .order-item:hover {
+    background-color: rgba(83, 134, 113, 0.05);
+  }
+  
+  .order-item:last-child {
+    border-bottom: none;
+  }
+  
+  .product-image-checkout {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .product-name-checkout {
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+  }
+  
+  .product-description-checkout {
+    color: var(--light-text);
+    font-size: 0.9rem;
+    margin-bottom: 0;
+  }
+  
+  .quantity-badge {
+    background: var(--accent-color);
+    color: white;
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  
+  .price-highlight {
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+  }
+  
+  .summary-section {
+    background: var(--light-bg);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 20px;
+  }
+  
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .summary-row:last-child {
+    border-bottom: none;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+  }
+  
+  .discount-badge {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  
+  .green-btn-custom {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .green-btn-custom:hover {
+    background: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dark-btn-custom {
+    background: var(--dark-text);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+  
+  .dark-btn-custom:hover {
+    background: #34495E;
+    color: white;
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+  
+  .security-badge {
+    background: rgba(46, 204, 113, 0.1);
+    border: 1px solid rgba(46, 204, 113, 0.3);
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    display: none;
+  }
+  
+  .spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid var(--accent-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .pulse {
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  .form-step {
+    display: none;
+  }
+  
+  .form-step.active {
+    display: block;
+    animation: fadeIn 0.5s ease;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .step-indicator {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+  
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    flex: 1;
+  }
+  
+  .step:not(:last-child):after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background: var(--border-color);
+    z-index: 1;
+  }
+  
+  .step.active:not(:last-child):after {
+    background: var(--accent-color);
+  }
+  
+  .step-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    z-index: 2;
+    transition: all 0.3s ease;
+  }
+  
+  .step.active .step-circle {
+    background: var(--accent-color);
+  }
+  
+  .step.completed .step-circle {
+    background: var(--primary-color);
+  }
+  
+  .step-label {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: var(--light-text);
+  }
+  
+  .step.active .step-label {
+    color: var(--primary-color);
+    font-weight: 600;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .checkout-hero {
+      padding: 40px 0 20px;
+    }
+    
+    .checkout-header {
+      padding: 15px 20px;
+    }
+    
+    .order-item {
+      padding: 15px;
+    }
+    
+    .product-image-checkout {
+      width: 70px;
+      height: 70px;
+    }
+    
+    .summary-section {
+      padding: 20px;
+    }
+    
+    .mobile-stack {
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .mobile-text-center {
+      text-align: center;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .checkout-hero {
+      padding: 30px 0 15px;
+    }
+    
+    .order-item {
+      padding: 12px;
+    }
+    
+    .product-image-checkout {
+      width: 60px;
+      height: 60px;
+    }
+    
+    .step-label {
+      font-size: 0.8rem;
+    }
+  }
+</style>
+
+<!-- AOS CSS -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+</div>
+
+<div class="container-fluid p-0">
+  <!-- Hero Section -->
+  <section class="checkout-hero">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 text-center">
+          <h1 class="display-5 fw-bold mb-3" data-aos="fade-up">Checkout</h1>
+          <p class="lead" data-aos="fade-up" data-aos-delay="200">Complete your purchase with secure checkout</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container checkout-container">
+    <!-- Step Indicator -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="step-indicator">
+          <div class="step active">
+            <div class="step-circle">1</div>
+            <div class="step-label">Shipping</div>
+          </div>
+          <div class="step">
+            <div class="step-circle">2</div>
+            <div class="step-label">Payment</div>
+          </div>
+          <div class="step">
+            <div class="step-circle">3</div>
+            <div class="step-label">Confirmation</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back to Cart -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <a href="{% url 'cart_page' %}" class="dark-btn-custom" data-aos="fade-right">
+          <i class="fas fa-arrow-left"></i> Back to Cart
+        </a>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Shipping Information -->
+      <div class="col-lg-7 mb-4">
+        <div class="checkout-card" data-aos="fade-up">
+          <div class="checkout-header">
+            <h3 class="mb-0"><i class="fas fa-shipping-fast me-2"></i>Shipping Information</h3>
+          </div>
+          
+          <div class="p-4">
+            <form id="checkoutForm" action="/checkout" method="POST">
+              {% csrf_token %}
+              <div class="form-step active" id="step1">
+                <div class="form-group">
+                  <label class="form-label" for="address">Address</label>
+                  <input class="form-control-custom" type="text" id="address" name="add" placeholder="Enter your complete address" required>
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="form-label" for="city">City</label>
+                      <input class="form-control-custom" type="text" id="city" name="city" placeholder="Enter your city" required>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="form-label" for="state">State</label>
+                      <input class="form-control-custom" type="text" id="state" name="state" placeholder="Enter your state" required>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Hidden fields for additional steps in a multi-step form -->
+                <div class="form-step" id="step2">
+                  <!-- Payment information would go here in a real implementation -->
+                </div>
+                
+                <div class="form-step" id="step3">
+                  <!-- Order confirmation would go here in a real implementation -->
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="col-lg-5">
+        <div class="summary-section" data-aos="fade-left" data-aos-delay="300">
+          <h3 class="mb-4"><i class="fas fa-receipt me-2"></i>Order Summary</h3>
+          
+          <div class="mb-4" id="orderItems">
+            {% for item in items %}
+            <div class="order-item" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:1|mul:100 }}">
+              <div class="row align-items-center">
+                <div class="col-3">
+                  <img src="{{ item|cart_img:request.session.cart }}" alt="{{ item.name }}" class="product-image-checkout">
+                </div>
+                <div class="col-6">
+                  <h5 class="product-name-checkout">{{ item.name }}</h5>
+                  <p class="product-description-checkout">{{ item.description }}</p>
+                </div>
+                <div class="col-3 text-end">
+                  <span class="quantity-badge">x{{ item|cart_quantity:request.session.cart }}</span>
+                  <div class="price-highlight mt-1">Rs {{ item.price }}</div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          
+          <div class="mt-4">
+            <!-- Subtotal -->
+            <div class="summary-row">
+              <span>Subtotal ({{ items|length }} items):</span>
+              <span class="price-highlight" id="subtotal-amount">Rs {{ items|price_total:request.session.cart }}</span>
+            </div>
+            
+            <!-- Discount -->
+            {% if request.session.newUserDis and items|price_total:request.session.cart >= 500 %}
+            <div class="summary-row">
+              <div>
+                <span>First Order Discount</span>
+                <span class="discount-badge ms-2">20% OFF</span>
+              </div>
+              <span class="price-highlight text-success">
+                - Rs {{ items|dis20:request.session.cart|floatformat:2 }}
+              </span>
+            </div>
+            {% endif %}
+            
+            <!-- Total -->
+            <div class="summary-row">
+              <span><strong>Grand Total:</strong></span>
+              <span class="price-highlight">
+                <strong id="grand-total">
+                  Rs 
+                  {% if request.session.newUserDis and items|price_total:request.session.cart >= 500 %}
+                    {{ items|dis20:request.session.cart }}
+                  {% else %}
+                    {{ items|price_total:request.session.cart }}
+                  {% endif %}
+                </strong>
+              </span>
+            </div>
+          </div>
+          
+          <!-- Continue Button -->
+          <div class="mt-4">
+            <button type="submit" form="checkoutForm" class="green-btn-custom pulse">
+              <i class="fas fa-lock me-2"></i>Continue to Payment
+            </button>
+          </div>
+          
+          <!-- Security Badge -->
+          <div class="security-badge" data-aos="fade-up" data-aos-delay="400">
+            <div class="d-flex align-items-center justify-content-center">
+              <i class="fas fa-shield-alt text-success me-2"></i>
+              <div>
+                <strong>Secure Checkout</strong>
+                <p class="mb-0 small">Your information is protected with 256-bit SSL encryption</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include 'store/footer.html' %}
+
+<!-- AOS JS -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  // Initialize AOS
+  document.addEventListener('DOMContentLoaded', function() {
+    AOS.init({
+      duration: 800,
+      once: true,
+      offset: 50
+    });
+
+    // Form validation and enhancement
+    const form = document.getElementById('checkoutForm');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    
+    // Add loading state to form submission
+    form.addEventListener('submit', function(e) {
+      // Basic form validation
+      const address = document.getElementById('address').value.trim();
+      const city = document.getElementById('city').value.trim();
+      const state = document.getElementById('state').value.trim();
+      
+      if (!address || !city || !state) {
+        e.preventDefault();
+        alert('Please fill in all required fields');
+        return;
+      }
+      
+      // Show loading overlay
+      loadingOverlay.style.display = 'flex';
+      
+      // In a real implementation, you might do additional validation or processing here
+      // For now, we'll let the form submit normally
+    });
+    
+    // Add input animations
+    const inputs = document.querySelectorAll('.form-control-custom');
+    inputs.forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.classList.add('focused');
+      });
+      
+      input.addEventListener('blur', function() {
+        if (this.value === '') {
+          this.parentElement.classList.remove('focused');
+        }
+      });
+    });
+    
+    // Add character counters for inputs (optional enhancement)
+    const addressInput = document.getElementById('address');
+    addressInput.addEventListener('input', function() {
+      const charCount = this.value.length;
+      // You could display character count if needed
+    });
+  });
+</script>
+
+{% endblock content %}

@@ -1,0 +1,485 @@
+{% extends 'store/main.html' %}
+
+{% block content %}
+
+<style>
+  :root {
+    --primary-color: #3C6255;
+    --secondary-color: #EAE7B1;
+    --accent-color: #538671;
+    --light-bg: #fffef2;
+    --dark-text: #2C3E50;
+    --light-text: #7F8C8D;
+    --border-color: #E8E8E8;
+  }
+  
+  .empty-cart-hero {
+    background: linear-gradient(135deg, var(--light-bg) 0%, rgba(234, 231, 177, 0.3) 100%);
+    padding: 80px 0 60px;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+  }
+  
+  .empty-cart-container {
+    padding: 0 15px;
+  }
+  
+  .empty-cart-content {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .empty-cart-illustration {
+    max-width: 400px;
+    width: 100%;
+    height: auto;
+    margin-bottom: 30px;
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
+  }
+  
+  .empty-cart-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--dark-text);
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+  
+  .empty-cart-subtitle {
+    font-size: 1.2rem;
+    color: var(--light-text);
+    margin-bottom: 40px;
+    line-height: 1.6;
+  }
+  
+  .shopping-btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(60, 98, 85, 0.3);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .shopping-btn:hover {
+    background: var(--accent-color);
+    color: white;
+    text-decoration: none;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(83, 134, 113, 0.4);
+  }
+  
+  .shopping-btn:active {
+    transform: translateY(-1px);
+  }
+  
+  .shopping-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+  }
+  
+  .shopping-btn:hover::before {
+    left: 100%;
+  }
+  
+  .featured-products {
+    background: white;
+    padding: 60px 0;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--dark-text);
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .product-card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    height: 100%;
+    border: 1px solid var(--border-color);
+  }
+  
+  .product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  }
+  
+  .product-image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin: 0 auto 15px;
+    transition: all 0.3s ease;
+  }
+  
+  .product-card:hover .product-image {
+    transform: scale(1.05);
+  }
+  
+  .product-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--dark-text);
+    margin-bottom: 8px;
+  }
+  
+  .product-price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+  }
+  
+  .add-to-cart-btn {
+    background: var(--secondary-color);
+    color: var(--dark-text);
+    border: none;
+    border-radius: 25px;
+    padding: 8px 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    width: 100%;
+  }
+  
+  .add-to-cart-btn:hover {
+    background: var(--accent-color);
+    color: white;
+    transform: translateY(-2px);
+  }
+  
+  .benefits-section {
+    background: var(--light-bg);
+    padding: 60px 0;
+  }
+  
+  .benefit-card {
+    text-align: center;
+    padding: 30px 20px;
+    transition: all 0.3s ease;
+  }
+  
+  .benefit-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    color: white;
+    font-size: 2rem;
+    transition: all 0.3s ease;
+  }
+  
+  .benefit-card:hover .benefit-icon {
+    background: var(--accent-color);
+    transform: scale(1.1) rotate(5deg);
+  }
+  
+  .benefit-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--dark-text);
+    margin-bottom: 10px;
+  }
+  
+  .benefit-description {
+    color: var(--light-text);
+    line-height: 1.6;
+  }
+  
+  .floating-animation {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+  
+  .pulse-animation {
+    animation: pulse 2s ease-in-out infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+  
+  .bounce-in {
+    animation: bounceIn 1s ease;
+  }
+  
+  @keyframes bounceIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.3);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+    70% {
+      transform: scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  .fade-in-up {
+    animation: fadeInUp 1s ease;
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .empty-cart-hero {
+      padding: 60px 0 40px;
+      min-height: 70vh;
+    }
+    
+    .empty-cart-title {
+      font-size: 2rem;
+    }
+    
+    .empty-cart-subtitle {
+      font-size: 1.1rem;
+    }
+    
+    .empty-cart-illustration {
+      max-width: 300px;
+    }
+    
+    .section-title {
+      font-size: 1.8rem;
+    }
+    
+    .shopping-btn {
+      padding: 12px 30px;
+      font-size: 1rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .empty-cart-hero {
+      padding: 40px 0 30px;
+    }
+    
+    .empty-cart-title {
+      font-size: 1.8rem;
+    }
+    
+    .empty-cart-subtitle {
+      font-size: 1rem;
+      margin-bottom: 30px;
+    }
+    
+    .empty-cart-illustration {
+      max-width: 250px;
+      margin-bottom: 20px;
+    }
+    
+    .section-title {
+      font-size: 1.6rem;
+    }
+    
+    .featured-products,
+    .benefits-section {
+      padding: 40px 0;
+    }
+    
+    .benefit-card {
+      padding: 20px 15px;
+    }
+    
+    .benefit-icon {
+      width: 60px;
+      height: 60px;
+      font-size: 1.5rem;
+    }
+  }
+</style>
+
+<!-- AOS CSS -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<div class="container-fluid p-0">
+  <!-- Empty Cart Hero Section -->
+  <section class="empty-cart-hero">
+    <div class="container empty-cart-container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+          <div class="empty-cart-content">
+            <!-- Animated Illustration -->
+            <img 
+              src="https://cdni.iconscout.com/illustration/premium/thumb/empty-cart-5521508-4610092.png" 
+              alt="Empty Cart Illustration" 
+              class="empty-cart-illustration floating-animation"
+              data-aos="zoom-in"
+              data-aos-duration="1000"
+            >
+            
+            <!-- Title -->
+            <h1 class="empty-cart-title" data-aos="fade-up" data-aos-delay="200">
+              Your Cart is Empty
+            </h1>
+            
+            <!-- Subtitle -->
+            <p class="empty-cart-subtitle" data-aos="fade-up" data-aos-delay="400">
+              Looks like you haven't added any items to your cart yet. 
+              Discover our fresh collection and find something you'll love!
+            </p>
+            
+            <!-- Shopping Button -->
+            <a 
+              href="{% url 'store_page' %}" 
+              class="shopping-btn pulse-animation"
+              data-aos="fade-up"
+              data-aos-delay="600"
+            >
+              <i class="fas fa-store"></i>
+              Start Shopping
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+ 
+
+
+  <!-- Benefits Section -->
+  <section class="benefits-section">
+    <div class="container">
+      <h2 class="section-title" data-aos="fade-up">
+        Why Shop With Us?
+      </h2>
+      
+      <div class="row g-4">
+        <!-- Benefit 1 -->
+        <div class="col-12 col-md-4" data-aos="fade-up" data-aos-delay="200">
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <i class="fas fa-shipping-fast"></i>
+            </div>
+            <h3 class="benefit-title">Free Delivery</h3>
+            <p class="benefit-description">
+              Enjoy free delivery on orders above Rs 500. Fast and reliable shipping to your doorstep.
+            </p>
+          </div>
+        </div>
+        
+        <!-- Benefit 2 -->
+        <div class="col-12 col-md-4" data-aos="fade-up" data-aos-delay="300">
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <i class="fas fa-leaf"></i>
+            </div>
+            <h3 class="benefit-title">Fresh & Organic</h3>
+            <p class="benefit-description">
+              All our products are fresh, organic, and sourced directly from local farmers.
+            </p>
+          </div>
+        </div>
+        
+        <!-- Benefit 3 -->
+        <div class="col-12 col-md-4" data-aos="fade-up" data-aos-delay="400">
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3 class="benefit-title">Secure Payment</h3>
+            <p class="benefit-description">
+              Your payments are 100% secure with our encrypted checkout process.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- AOS JS -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  // Initialize AOS
+  document.addEventListener('DOMContentLoaded', function() {
+    AOS.init({
+      duration: 800,
+      once: true,
+      offset: 50
+    });
+
+    // Add to cart button functionality (for demo purposes)
+    const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+    
+    addToCartButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // Animation effect
+        this.innerHTML = '<i class="fas fa-check me-2"></i>Added to Cart';
+        this.style.background = 'var(--primary-color)';
+        this.style.color = 'white';
+        
+        // Reset after 2 seconds
+        setTimeout(() => {
+          this.innerHTML = '<i class="fas fa-cart-plus me-2"></i>Add to Cart';
+          this.style.background = 'var(--secondary-color)';
+          this.style.color = 'var(--dark-text)';
+        }, 2000);
+        
+        // In a real implementation, you would add the product to cart here
+        console.log('Product added to cart');
+      });
+    });
+  });
+</script>
+
+{% endblock %}
